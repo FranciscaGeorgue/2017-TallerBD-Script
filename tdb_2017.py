@@ -6,7 +6,7 @@ import datetime
 conn = mysql.connector.connect(host = "localhost", user = "root", passwd = "", db = "tdb_2017")
 cursor = conn.cursor()
 
-############################ Poblamiento Tabla "Evento" ############################
+############################ Poblamiento Tabla "Evento" ################################
 
 #Funcion para obtener fecha
 def get_random_date(year):
@@ -24,7 +24,6 @@ try:
         fecha=str(date)
         cursor.execute("INSERT INTO evento(id_evento,fecha) VALUES("+str(i)+",'"+str(fecha[0:10])+"')")
         conn.commit()
-        
 except Exception, e:
     print (str(e))
     conn.rollback()
@@ -43,14 +42,55 @@ try:
         id_evento = registro[0]
         fecha = registro[1]
         print(id_evento,fecha)
-
-except:
-    print "Error: No se pudo modificar la data"
+except Exception, e:
+    print (str(e))
+    conn.rollback()
         
-############################ Poblamiento Tabla "Torneo" ############################
+############################ Poblamiento Tabla "Torneo" ################################
 
+# Insertar datos #
+try:
+    for i in range(20):
+        cursor.execute("INSERT INTO torneo(id_torneo,fk_evento) VALUES("+str(i)+",'"+str(i)+"')")
+        conn.commit()
+except Exception, e:
+    print (str(e))
+    conn.rollback()
+
+# Obtener datos #
+try:
+    cursor.execute("SELECT * FROM torneo")
+    resultados = cursor.fetchall()
+    for registro in resultados:
+        id_torneo = registro[0]
+        fk_evento = registro[1]
+        print(id_torneo,fk_evento)
+except Exception, e:
+    print (str(e))
+    conn.rollback()
 
 ############################ Poblamiento Tabla "Campeonato" ############################
+
+# Insertar datos #
+try:
+    for i in range(20):
+        cursor.execute("INSERT INTO campeonato(id_campeonato,fk_evento) VALUES("+str(i)+",'"+str(i)+"')")
+        conn.commit()
+except Exception, e:
+    print (str(e))
+    conn.rollback()
+
+# Obtener datos #
+try:
+    cursor.execute("SELECT * FROM campeonato")
+    resultados = cursor.fetchall()
+    for registro in resultados:
+        id_campeonato = registro[0]
+        fk_evento = registro[1]
+        print(id_campeonato,fk_evento)
+except Exception, e:
+    print (str(e))
+    conn.rollback()
 
 
 cursor.close()
