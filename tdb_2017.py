@@ -7,6 +7,13 @@ conn = mysql.connector.connect(host = "localhost", user = "root", passwd = "", d
 cursor = conn.cursor()
 
 ############################ Poblamiento Tabla "Evento" ################################
+#COLUMNAS DE LA TABLA EVENTO:
+#id: int(10) - PK
+#fecha_inicio: DATE
+#fecha_termino: DATE
+#nombre: VARCHAR(30)
+#premio_id: int(10)
+#directiva_rut: VARCHAR(20)
 
 #Funcion para obtener fecha
 def get_random_date(year):
@@ -47,6 +54,8 @@ except Exception, e:
     conn.rollback()
         
 ############################ Poblamiento Tabla "Torneo" ################################
+#COLUMNAS DE LA TABLA TORNEO
+#evento_id: int(10) - PK
 
 # Insertar datos #
 try:
@@ -70,6 +79,9 @@ except Exception, e:
     conn.rollback()
 
 ############################ Poblamiento Tabla "Campeonato" ############################
+#evento_id: int(10) - PK
+#numero_campeonato: int(20)unsigned
+#numero_fechas: int(10)
 
 # Insertar datos #
 try:
