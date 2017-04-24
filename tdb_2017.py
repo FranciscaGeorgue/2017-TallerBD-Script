@@ -3,7 +3,7 @@ import mysql.connector
 import random
 import datetime
 
-conn = mysql.connector.connect(host = "localhost", user = "root", passwd = "", db = "tdb_2017")
+conn = mysql.connector.connect(host = "localhost", user = "root", passwd = "", db = "asociacion_deportes")
 cursor = conn.cursor()
 
 ############################ Poblamiento Tabla "Evento" ################################
@@ -29,7 +29,8 @@ try:
     for i in range(20):
         date = get_random_date(random.randint(2000,2017))
         fecha=str(date)
-        cursor.execute("INSERT INTO evento(id_evento,fecha) VALUES("+str(i)+",'"+str(fecha[0:10])+"')")
+        #En el insert falta agregar fechas que no sean iguales y que la de inicio sea menor a la de termino, además de agregar nombre y directiva_rut
+        cursor.execute("INSERT INTO evento(id, fecha_inicio, fecha_termino, nombre, premio_id, directiva_rut) VALUES("+str(i)+",'"+str(fecha[0:10])+"',"+str(fecha[0:10])+",'nombre',"+str(i)+",'directiva_rut')")
         conn.commit()
 except Exception, e:
     print (str(e))
@@ -46,9 +47,13 @@ try:
     cursor.execute("SELECT * FROM evento")
     resultados = cursor.fetchall()
     for registro in resultados:
-        id_evento = registro[0]
-        fecha = registro[1]
-        print(id_evento,fecha)
+        evento_id = registro[0]
+        fecha_inicio = registro[1]
+        fecha_termino = registro[2]
+        nombre = registro[3]
+        premio_id = registro[4]
+        directiva_rut = registro[5]
+        print(evento_id, fecha_inicio, fecha_termino, nombre, premio_id, directiva_rut)
 except Exception, e:
     print (str(e))
     conn.rollback()
@@ -60,7 +65,7 @@ except Exception, e:
 # Insertar datos #
 try:
     for i in range(20):
-        cursor.execute("INSERT INTO torneo(id_torneo,fk_evento) VALUES("+str(i)+",'"+str(i)+"')")
+        cursor.execute("INSERT INTO torneo(evento_id) VALUES("+str(i)+")")
         conn.commit()
 except Exception, e:
     print (str(e))
@@ -71,9 +76,8 @@ try:
     cursor.execute("SELECT * FROM torneo")
     resultados = cursor.fetchall()
     for registro in resultados:
-        id_torneo = registro[0]
-        fk_evento = registro[1]
-        print(id_torneo,fk_evento)
+        evento_id = registro[0]
+        print(evento_id)
 except Exception, e:
     print (str(e))
     conn.rollback()
@@ -86,7 +90,8 @@ except Exception, e:
 # Insertar datos #
 try:
     for i in range(20):
-        cursor.execute("INSERT INTO campeonato(id_campeonato,fk_evento) VALUES("+str(i)+",'"+str(i)+"')")
+        #No sé con qué se llena numero_fechas
+        cursor.execute("INSERT INTO campeonato(evento_id, numero_campeonato, numero_fechas) VALUES("+str(i)+","+str(i)+","+str(i)+")")
         conn.commit()
 except Exception, e:
     print (str(e))
@@ -97,9 +102,10 @@ try:
     cursor.execute("SELECT * FROM campeonato")
     resultados = cursor.fetchall()
     for registro in resultados:
-        id_campeonato = registro[0]
-        fk_evento = registro[1]
-        print(id_campeonato,fk_evento)
+        evento_id = registro[0]
+        numero_campeonato = registro[1]
+        numero_fechas = registro[2]
+        print(evento_id, numero_campeonato, numero_fechas)
 except Exception, e:
     print (str(e))
     conn.rollback()
